@@ -1,0 +1,18 @@
+- name: Run tests
+    run: |
+      mix compile --warnings-as-errors
+      mix format --check-formatted
+      mix ecto.create
+      mix ecto.migrate
+      mix test
+    env:
+      MIX_ENV: test
+      PGHOST: localhost
+      PGUSER: postgres
+
+  - name: Slack Notification
+    uses: rtCamp/action-slack-notify@master
+    env:
+      SLACK_MESSAGE: Run tests output
+      SLACK_TITLE: CI Test Suite
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
